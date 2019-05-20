@@ -61,25 +61,53 @@
             app:layout_constraintVertical_bias="0.05"/>
 
     <LinearLayout
+            android:id="@+id/shadow_element"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_bias="1">
-
-        <Button android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="111111111111111111"
-        android:layout_weight="1"/>
-        <Button android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-        <Button android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+            app:layout_constraintVertical_bias="0.9">
     </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@id/shadow_element"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:padding="1dp">
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_pause_28"
+                android:layout_weight="2"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Song Name"
+                android:gravity="center"
+                android:layout_weight="1"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="time"
+                android:gravity="center"
+                android:layout_weight="2"/>
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_pause_28"
+                android:layout_weight="2"/>
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_mini_player_next_28"
+                android:layout_weight="2"/>
+    </LinearLayout>
+
 
 
 </android.support.constraint.ConstraintLayout>
