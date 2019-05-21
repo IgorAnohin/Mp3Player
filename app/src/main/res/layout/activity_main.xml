@@ -1,82 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
-    <TextView
-            android:id="@+id/main_question"
+    <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:background="#eceef0"
+            >
 
-            android:text="Откуда играть музыку?"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:gravity="center"
-            style="@style/Base.TextAppearance.AppCompat.Large"
+        <TextView
+                android:id="@+id/main_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-            app:layout_constraintBottom_toTopOf="@id/little_text_hint"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1"
+                android:text="Откуда играть музыку?"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:gravity="center"
+                style="@style/Base.TextAppearance.AppCompat.Large"
 
-            />
+                app:layout_constraintBottom_toTopOf="@id/little_text_hint"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1"
 
-    <TextView
-            android:id="@+id/little_text_hint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        />
 
-            android:text="Выберите папку с аудиозаписями"
-            android:textAllCaps="false"
-            android:textColor="#c8cbcd"
-            android:gravity="center"
-            style="@style/Base.TextAppearance.AppCompat.Small"
+        <TextView
+                android:id="@+id/little_text_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+                android:text="Выберите папку с аудиозаписями"
+                android:textAllCaps="false"
+                android:textColor="#c8cbcd"
+                android:gravity="center"
+                style="@style/Base.TextAppearance.AppCompat.Small"
 
-    <Button
-            android:id="@+id/search_button"
-            android:layout_width="146dp"
-            android:layout_height="38dp"
-            android:background="@drawable/gradient_open_folder_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.55"/>
 
-            android:text="Выбрать папку"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:padding="10dp"
+        <Button
+                android:id="@+id/search_button"
+                android:layout_width="146dp"
+                android:layout_height="38dp"
+                android:background="@drawable/gradient_open_folder_button"
 
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/little_text_hint"
-            app:layout_constraintVertical_bias="0.05"/>
+                android:text="Выбрать папку"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:padding="10dp"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/little_text_hint"
+                app:layout_constraintVertical_bias="0.05"/>
+
+
+    </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
-            android:id="@+id/shadow_element"
+            android:id="@+id/song_shortcat"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_bias="0.9">
-    </LinearLayout>
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="@id/shadow_element"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="0.9"
             android:padding="1dp">
 
         <ImageView
@@ -108,6 +110,4 @@
                 android:layout_weight="2"/>
     </LinearLayout>
 
-
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
