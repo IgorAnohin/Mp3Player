@@ -30,7 +30,7 @@ final class MusicRepository {
 
     void setMusicFolder(String musicFolderPath) {
         Log.i("AmyAPP", "foler path " + musicFolderPath);
-        File musicFolder = new File(musicFolderPath + "/Slack");
+        File musicFolder = new File(musicFolderPath);
         if (musicFolder.isDirectory())
             Log.i("AmyAPP", "FOLDER");
         data.clear();
