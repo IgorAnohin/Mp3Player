@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var root: File
     lateinit var curFolder: File
     lateinit var backToParent: Button
+    lateinit var pickFolder: Button
     lateinit var dialogFilesList: ListView
     lateinit var currentFolderText: TextView
     val fileList = arrayListOf<String>()
@@ -92,12 +93,14 @@ class MainActivity : AppCompatActivity() {
                 dialog.setCanceledOnTouchOutside(true)
 
                 backToParent = dialog.findViewById(R.id.back_to_parent)
+                pickFolder = dialog.findViewById(R.id.pick_folder)
                 dialogFilesList = dialog.findViewById(R.id.dialog_files_list)
                 currentFolderText = dialog.findViewById(R.id.current_folder)
 
                 backToParent.setOnClickListener {
                     listDir(curFolder.parentFile)
                 }
+
                 dialogFilesList.setOnItemClickListener { parent, view, position, id ->
                     val selected = File(fileList[position])
                     if (selected.isDirectory) {
@@ -107,9 +110,6 @@ class MainActivity : AppCompatActivity() {
                         toast.show()
                     }
                 }
-
-
-
             }
             else -> {
 
@@ -139,9 +139,13 @@ class MainActivity : AppCompatActivity() {
         val files = file.listFiles()
         fileList.clear()
 
+        var haveMp3FileInside = false
         for (f in files) {
+            if (f.name.endsWith(".mp3"))
+                haveMp3FileInside = true
             fileList.add(f.path)
         }
+        pickFolder.isEnabled = haveMp3FileInside
 
         val directoryListAdapter = ArrayAdapter<String>(this,
             R.layout.simple_list_item_1, fileList)
