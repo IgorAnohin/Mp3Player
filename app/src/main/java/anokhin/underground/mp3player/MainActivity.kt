@@ -66,10 +66,16 @@ class MainActivity : AppCompatActivity() {
             if (mediaController != null)
                 mediaController!!.transportControls.skipToNext()
         }
+        var playing = false;
+        var pausing = false;
         startStopButton = findViewById(R.id.start_stop_button)
         startStopButton.setOnClickListener {
-            if (mediaController != null)
-                mediaController!!.transportControls.pause()
+            if (mediaController != null) {
+                if (playing)
+                    mediaController!!.transportControls.pause()
+                if (pausing)
+                    mediaController!!.transportControls.play()
+            }
         }
 
 
@@ -98,9 +104,19 @@ class MainActivity : AppCompatActivity() {
             override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
                 if (state == null)
                     return
-                val playing = state.state == PlaybackStateCompat.STATE_PLAYING
-                skipTrackButton.isClickable = playing
-                startStopButton.isClickable = playing || state.state == PlaybackStateCompat.STATE_PAUSED
+                playing = state.state == PlaybackStateCompat.STATE_PLAYING
+                pausing = state.state == PlaybackStateCompat.STATE_PAUSED
+
+                skipTrackButton.isClickable = playing || pausing
+                startStopButton.isClickable = playing || pausing
+                if (playing)
+                    startStopButton.post {
+                        startStopButton.setImageResource(R.drawable.ic_pause_28)
+                    }
+                if (pausing)
+                    startStopButton.post {
+                        startStopButton.setImageResource(R.drawable.ic_play_arrow_blue_24dp)
+                    }
 //                if (state.state == PlaybackStateCompat.STATE_PLAYING)
 //                    startStopButton.setImageResource(R.drawable.)
 //                playButton.isEnabled = !playing
