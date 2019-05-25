@@ -182,6 +182,9 @@ class PlayerService : Service() {
         }
 
         private fun updateMetadataFromTrack(track:MusicRepository.Track) {
+//            if (track.bitmap != null)
+//                metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, track.bitmap)
+//            else
             metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, BitmapFactory.decodeResource(resources, track.bitmapResId))
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, track.title)
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, track.album)

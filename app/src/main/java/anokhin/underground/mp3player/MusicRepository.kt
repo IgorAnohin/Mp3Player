@@ -6,6 +6,10 @@ import android.util.Log
 
 import java.io.File
 import java.util.ArrayList
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import java.io.ByteArrayInputStream
+
 
 class MusicRepository {
     private val data = ArrayList<Track>()
@@ -64,6 +68,8 @@ class MusicRepository {
             private set
         var uri: Uri? = null
             private set
+        var bitmap: Bitmap? = null
+            private set
         var duration: Long = 0
             private set // in ms
 
@@ -71,6 +77,12 @@ class MusicRepository {
             Log.i("AmyAPP", "my App reseivec $trackPath")
             val mmr = MediaMetadataRetriever()
             mmr.setDataSource(trackPath)
+
+
+            if (mmr.embeddedPicture != null) {
+                val inputStream = ByteArrayInputStream(mmr.embeddedPicture)
+                this.bitmap = BitmapFactory.decodeStream(inputStream)
+            }
             this.album = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)
             this.title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
             this.artist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)

@@ -1,6 +1,7 @@
 package anokhin.underground.mp3player
 
 import android.Manifest
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ComponentName
 import android.content.Context
@@ -23,11 +24,21 @@ import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog.*
 import java.io.File
+import android.provider.MediaStore.Images.Media.getBitmap
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+
+
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        var bitMapGlobal: Bitmap? = null
+
+    }
 
     val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 0
     val CUSTOM_DIALOG_ID = 0
+    val MAIN_DIALOG_ID = 1
     lateinit var root: File
     lateinit var curFolder: File
     lateinit var backToParent: Button
@@ -46,11 +57,29 @@ class MainActivity : AppCompatActivity() {
     private var mediaController: MediaControllerCompat? = null
     private var callback: MediaControllerCompat.Callback? = null
     lateinit var serviceConnection: ServiceConnection
+    var playing = false
+    var pausing = false
 
     val fileList = arrayListOf<String>()
 
     private fun hasPermission(perm: String): Boolean {
         return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, perm)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putString("trackName", trackName.text.toString())
+        outState.putString("trackTime", trackTime.text.toString())
+//        val tag = singerPhoto.tag as Int?
+//        if (tag != null)
+//            outState.putInt("songPhoto", tag)
+//            outState.putInt("songPhoto", tag)
+//        singerPhoto.invalidate()
+//        val drawable = singerPhoto.getDrawable() as BitmapDrawable
+//        val bitmap = drawable.bitmap
+//        outState.putParcelable("bitmap", bitmap)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +88,7 @@ class MainActivity : AppCompatActivity() {
         curFolder = root
 
         setContentView(R.layout.activity_main)
+        singerPhoto = findViewById(R.id.track_photo)
         trackName = findViewById(R.id.track_name)
         trackTime = findViewById(R.id.song_time)
         skipTrackButton = findViewById(R.id.skip_track)
@@ -66,8 +96,6 @@ class MainActivity : AppCompatActivity() {
             if (mediaController != null)
                 mediaController!!.transportControls.skipToNext()
         }
-        var playing = false;
-        var pausing = false;
         startStopButton = findViewById(R.id.start_stop_button)
         startStopButton.setOnClickListener {
             if (mediaController != null) {
@@ -75,6 +103,27 @@ class MainActivity : AppCompatActivity() {
                     mediaController!!.transportControls.pause()
                 if (pausing)
                     mediaController!!.transportControls.play()
+            }
+        }
+
+        if (savedInstanceState != null) {
+//            outState.putString("trackName", trackName.text.toString())
+//            outState.putString("trackTime", trackTime.text.toString())
+//            outState.putInt("songPhoto", singerPhoto.tag as Int)
+//            val bmp = savedInstanceState.getParcelable<Bitmap>("bitmap")
+
+            trackName.setText(savedInstanceState.getString("trackName", "Track"))
+            trackTime.setText(savedInstanceState.getString("trackTime", "42:42"))
+
+            Log.i("Own", "HEEEERRREEE")
+            if (bitMapGlobal != null) {
+                Log.i("Own", "Add new biMap " + bitMapGlobal.hashCode())
+                singerPhoto.post {
+
+                    singerPhoto.setImageBitmap(bitMapGlobal)
+//                    singerPhoto.setImageResource(imageId)
+//                    singerPhoto.tag = imageId
+                }
             }
         }
 
@@ -127,11 +176,17 @@ class MainActivity : AppCompatActivity() {
             override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
                 super.onMetadataChanged(metadata)
                 trackName.text = metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE)
-                metadata?.getBitmap(MediaMetadataCompat.METADATA_KEY_ART)
-                metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE)
-                metadata?.getString(MediaMetadataCompat.METADATA_KEY_ALBUM)
-                metadata?.getString(MediaMetadataCompat.METADATA_KEY_ARTIST)
-                metadata?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
+                trackTime.text = metadata?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toString()
+                singerPhoto.setImageBitmap(metadata?.getBitmap(MediaMetadataCompat.METADATA_KEY_ART))
+                Log.i("Own", "Add new biMap")
+                bitMapGlobal = metadata?.getBitmap(MediaMetadataCompat.METADATA_KEY_ART)
+                Log.i("Own", "Add new biMap " + bitMapGlobal.hashCode())
+
+//                metadata?.getBitmap(MediaMetadataCompat.METADATA_KEY_ART)
+//                metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE)
+//                metadata?.getString(MediaMetadataCompat.METADATA_KEY_ALBUM)
+//                metadata?.getString(MediaMetadataCompat.METADATA_KEY_ARTIST)
+//                metadata?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
             }
         }
 
@@ -215,12 +270,10 @@ class MainActivity : AppCompatActivity() {
         showDialog(CUSTOM_DIALOG_ID)
     }
 
-    override fun onCreateDialog(id: Int): Dialog? {
-        var dialog: Dialog? = null
-
+    override fun onCreateDialog(id: Int) =
         when (id) {
             CUSTOM_DIALOG_ID -> {
-                dialog = Dialog(this)
+                val dialog = Dialog(this)
                 dialog.setContentView(R.layout.dialog)
                 dialog.setTitle("File Explorer")
                 dialog.setCancelable(true)
@@ -249,6 +302,7 @@ class MainActivity : AppCompatActivity() {
                             Log.i("AmyAPP", "Add new Folder")
                         }
                     mediaController!!.transportControls.play()
+                    showDialog(MAIN_DIALOG_ID)
                 }
 
                 dialogFilesList.setOnItemClickListener { parent, view, position, id ->
@@ -260,13 +314,28 @@ class MainActivity : AppCompatActivity() {
                         toast.show()
                     }
                 }
+                dialog
+            }
+            MAIN_DIALOG_ID -> {
+
+//                val dialog = Dialog(this)
+//                dialog.setContentView(R.layout.songs)
+//                dialog.setCancelable(false)
+//                dialog.setCanceledOnTouchOutside(false)
+//                dialog.set
+                val builder = AlertDialog.Builder(this)
+//                builder.setTitle(R.string.info_title)
+//                builder.setMessage(R.string.info_description)
+//                builder.setPositiveButton(R.string.ok, null)
+//                builder.setNegativeButton(R.string.cancel, null)
+                builder.setContentView(R.layout.songs)
+                builder.setCancelable(false)
+                builder.setCanceledOnTouchOutside(false)
+                builder.create()
             }
             else -> {
-
+                null
             }
-        }
-
-        return dialog
     }
 
     override fun onPrepareDialog(id: Int, dialog: Dialog?) {
