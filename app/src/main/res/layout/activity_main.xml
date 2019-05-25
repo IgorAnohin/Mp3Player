@@ -82,28 +82,33 @@
             android:padding="1dp">
 
         <ImageView
+                android:id="@+id/track_photo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_pause_28"
+                android:src="@drawable/default_image"
                 android:layout_weight="2"/>
         <TextView
+                android:id="@+id/track_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Song Name"
                 android:gravity="center"
                 android:layout_weight="1"/>
         <TextView
+                android:id="@+id/song_time"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="time"
                 android:gravity="center"
                 android:layout_weight="2"/>
         <ImageView
+                android:id="@+id/start_stop_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_pause_28"
                 android:layout_weight="2"/>
         <ImageView
+                android:id="@+id/skip_track"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_mini_player_next_28"
