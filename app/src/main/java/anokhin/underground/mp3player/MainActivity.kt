@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
 
     val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 0
     val CUSTOM_DIALOG_ID = 0
-    val MAIN_DIALOG_ID = 1
     lateinit var root: File
     lateinit var curFolder: File
     lateinit var backToParent: Button
@@ -302,7 +301,9 @@ class MainActivity : AppCompatActivity() {
                             Log.i("AmyAPP", "Add new Folder")
                         }
                     mediaController!!.transportControls.play()
-                    showDialog(MAIN_DIALOG_ID)
+                    val intent = Intent(this, SongsActivity::class.java)
+//                    intent.putExtra("keyIdentifier", value)
+                    startActivity(intent)
                 }
 
                 dialogFilesList.setOnItemClickListener { parent, view, position, id ->
@@ -315,23 +316,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 dialog
-            }
-            MAIN_DIALOG_ID -> {
-
-//                val dialog = Dialog(this)
-//                dialog.setContentView(R.layout.songs)
-//                dialog.setCancelable(false)
-//                dialog.setCanceledOnTouchOutside(false)
-//                dialog.set
-                val builder = AlertDialog.Builder(this)
-//                builder.setTitle(R.string.info_title)
-//                builder.setMessage(R.string.info_description)
-//                builder.setPositiveButton(R.string.ok, null)
-//                builder.setNegativeButton(R.string.cancel, null)
-                builder.setContentView(R.layout.songs)
-                builder.setCancelable(false)
-                builder.setCanceledOnTouchOutside(false)
-                builder.create()
             }
             else -> {
                 null

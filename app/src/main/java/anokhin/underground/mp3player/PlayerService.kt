@@ -211,7 +211,22 @@ class PlayerService : Service() {
     }
 
     private val exoPlayerListener = object:ExoPlayer.EventListener {
-        override fun onTimelineChanged(timeline:Timeline?, manifest:Any?) {}
+        override fun onSeekProcessed() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onPositionDiscontinuity(reason: Int) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
+        }
+
+        override fun onTimelineChanged(timeline: Timeline?, manifest: Any?, reason: Int) {
+        }
+
+        override fun onRepeatModeChanged(repeatMode: Int) {
+        }
         override fun onTracksChanged(trackGroups:TrackGroupArray?, trackSelections:TrackSelectionArray?) {}
         override fun onLoadingChanged(isLoading:Boolean) {}
 
@@ -225,7 +240,6 @@ class PlayerService : Service() {
             }
         }
         override fun onPlayerError(error:ExoPlaybackException?) {}
-        override fun onPositionDiscontinuity() {}
         override fun onPlaybackParametersChanged(playbackParameters:PlaybackParameters?) {}
     }
 
