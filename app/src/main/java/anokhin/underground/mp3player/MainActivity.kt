@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
     var pausing = false
 
     val fileList = arrayListOf<String>()
+    private var gloalThread: Thread? = null
 
     private fun hasPermission(perm: String): Boolean {
         return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, perm)
@@ -239,23 +240,24 @@ class MainActivity : AppCompatActivity() {
 
         bindService(Intent(this, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
 
-        thread(start=true) {
-            while (true) {
-                if (playerServiceBinder != null) {
-                    val progressTime = playerServiceBinder?.getCurrentDuration()
-                    val duration = playerServiceBinder?.getFullDuration()
-                    Log.i("Own", "FULL DURATION: " + duration)
-                    Log.i("Own", "Past time: " + progressTime)
+        if (bitMapGlobal == null)
+            gloalThread = thread(start=true) {
+                while (true) {
+                    if (playerServiceBinder != null) {
+                        val progressTime = playerServiceBinder?.getCurrentDuration()
+                        val duration = playerServiceBinder?.getFullDuration()
+                        Log.i("Own", "FULL DURATION: " + duration)
+                        Log.i("Own", "Past time: " + progressTime)
 
-                    runOnUiThread {
-                        if (progressTime != null && duration != null) {
-                            trackTime.text = "-" + stringForTime(duration - progressTime)
+                        runOnUiThread {
+                            if (progressTime != null && duration != null) {
+                                trackTime.text = "-" + stringForTime(duration - progressTime)
+                            }
                         }
                     }
+                    Thread.sleep(1000)
                 }
-                Thread.sleep(100)
             }
-        }
 
     }
 

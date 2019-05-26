@@ -77,6 +77,7 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
     lateinit var curTrack: ImageView
 
     lateinit var seekBar: SeekBar
+    private  var gloalThread: Thread? = null
 
     var playing = false
     var pausing = false
@@ -280,24 +281,25 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
             }
         })
         bindService(Intent(this, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
-        thread(start = true) {
-            while (true) {
-                if (playerServiceBinder != null) {
-                    val progressTime = playerServiceBinder?.getCurrentDuration()
-                    val duration = playerServiceBinder?.getFullDuration()
-                    Log.i("Own", "FULL DURATION: " + duration)
-                    Log.i("Own", "Past time: " + progressTime)
+        if (gloalThread == null)
+            gloalThread = thread(start=true) {
+                while (true) {
+                    if (playerServiceBinder != null) {
+                        val progressTime = playerServiceBinder?.getCurrentDuration()
+                        val duration = playerServiceBinder?.getFullDuration()
+                        Log.i("Own", "FULL DURATION: " + duration)
+                        Log.i("Own", "Past time: " + progressTime)
 
-                    if (progressTime != null && duration != null) {
-                        trackTime.text = "-" + stringForTime(duration - progressTime)
-                        trackPlayingTime.text = stringForTime(progressTime)
-                        seekBar.max = duration.toInt()
-                        seekBar.progress = progressTime.toInt()
+                        if (progressTime != null && duration != null) {
+                            trackTime.text = "-" + stringForTime(duration - progressTime)
+                            trackPlayingTime.text = stringForTime(progressTime)
+                            seekBar.max = duration.toInt()
+                            seekBar.progress = progressTime.toInt()
+                        }
                     }
+                    Thread.sleep(1000)
                 }
-                Thread.sleep(1000)
             }
-        }
 
         /////////////////////////
     }
