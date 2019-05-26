@@ -34,7 +34,6 @@
                 android:id="@+id/center_image"
                 android:layout_width="260dp"
                 android:layout_height="260dp"
-                android:src="@drawable/default_image"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
