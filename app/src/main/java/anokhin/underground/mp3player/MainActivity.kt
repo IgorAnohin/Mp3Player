@@ -126,6 +126,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        trackName.isClickable = false
+        trackName.setOnClickListener{
+            val intent = Intent(this, SongsActivity::class.java)
+            startActivity(intent)
+        }
+        singerPhoto.isClickable = false
+        singerPhoto.setOnClickListener{
+            val intent = Intent(this, SongsActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
 
         search_button?.setOnClickListener{
 
@@ -157,6 +170,9 @@ class MainActivity : AppCompatActivity() {
 
                 skipTrackButton.isClickable = playing || pausing
                 startStopButton.isClickable = playing || pausing
+                singerPhoto.isClickable = playing || pausing
+                trackName.isClickable = playing || pausing
+
                 if (playing)
                     startStopButton.post {
                         startStopButton.setImageResource(R.drawable.ic_pause_28)
@@ -180,12 +196,17 @@ class MainActivity : AppCompatActivity() {
                 Log.i("Own", "Add new biMap")
                 bitMapGlobal = metadata?.getBitmap(MediaMetadataCompat.METADATA_KEY_ART)
                 Log.i("Own", "Add new biMap " + bitMapGlobal.hashCode())
-
 //                metadata?.getBitmap(MediaMetadataCompat.METADATA_KEY_ART)
 //                metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE)
 //                metadata?.getString(MediaMetadataCompat.METADATA_KEY_ALBUM)
 //                metadata?.getString(MediaMetadataCompat.METADATA_KEY_ARTIST)
 //                metadata?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
+                SongsActivity.callback?.onMetadataChanged(metadata)
+                SongsActivity.firstTrack = MusicRepository.Track("abum",
+                    trackName.text.toString(),
+                    metadata?.getString(MediaMetadataCompat.METADATA_KEY_ARTIST),
+                    metadata?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION),
+                    bitMapGlobal)
             }
         }
 
@@ -302,7 +323,6 @@ class MainActivity : AppCompatActivity() {
                         }
                     mediaController!!.transportControls.play()
                     val intent = Intent(this, SongsActivity::class.java)
-//                    intent.putExtra("keyIdentifier", value)
                     startActivity(intent)
                 }
 

@@ -9,12 +9,19 @@ import java.util.ArrayList
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
 import java.io.ByteArrayInputStream
+import java.time.Duration
 
 
 class MusicRepository {
     private val data = ArrayList<Track>()
     var maxIndex = data.size - 1
     private var currentItemIndex = 0
+
+    val checkNext: Track?
+        get() = if (currentItemIndex == maxIndex)
+                    data[0]
+                else
+                    data[currentItemIndex+1]
 
     val next: Track?
         get() {
@@ -89,6 +96,14 @@ class MusicRepository {
             this.bitmapResId = R.drawable.image396168
             this.uri = Uri.parse(trackPath)
             this.duration = java.lang.Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION))
+        }
+        constructor(album: String?, title: String, artist: String?, duration: Long?, bitmap: Bitmap?) {
+            this.album = album
+            this.title = title
+            this.artist = artist
+            this.bitmap = bitmap
+            if (duration != null)
+                this.duration = duration
         }
     }
 }
