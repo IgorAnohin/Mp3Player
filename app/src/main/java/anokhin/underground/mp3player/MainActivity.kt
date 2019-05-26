@@ -27,7 +27,7 @@ import java.io.File
 import android.provider.MediaStore.Images.Media.getBitmap
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
@@ -196,7 +196,7 @@ class MainActivity : AppCompatActivity() {
                 super.onMetadataChanged(metadata)
                 trackName.text = metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE)
                 ////////////////// PLACE FOR TIME CHANGING {TrackTIme}
-                trackTime.text = metadata?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toString()
+//                trackTime.text = metadata?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toString()
                 singerPhoto.setImageBitmap(metadata?.getBitmap(MediaMetadataCompat.METADATA_KEY_ART))
                 Log.i("Own", "Add new biMap")
                 bitMapGlobal = metadata?.getBitmap(MediaMetadataCompat.METADATA_KEY_ART)
@@ -239,33 +239,23 @@ class MainActivity : AppCompatActivity() {
 
         bindService(Intent(this, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
 
-//        playButton.setOnClickListener {
-//            if (mediaController != null)
-//                if (hasPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-//                    playerServiceBinder!!.setMusicRepositoryFolder(Environment.getExternalStorageDirectory().absolutePath + "/Slack")
-//                    Log.i("AmyAPP", "Add new Folder")
-//                }
-//            mediaController!!.transportControls.play()
-//        }
-//
-//        pauseButton.setOnClickListener {
-//            if (mediaController != null)
-//        }
-//
-//        stopButton.setOnClickListener {
-//            if (mediaController != null)
-//                mediaController!!.transportControls.stop()
-//        }
-//
-//        skipToNextButton.setOnClickListener {
-//            if (mediaController != null)
-//                mediaController!!.transportControls.skipToNext()
-//        }
-//
-//        skipToPreviousButton.setOnClickListener {
-//            if (mediaController != null)
-//                mediaController!!.transportControls.skipToPrevious()
-//        }
+        thread(start=true) {
+            while (true) {
+                if (playerServiceBinder != null) {
+                    val progressTime = playerServiceBinder?.getCurrentDuration()
+                    val duration = playerServiceBinder?.getFullDuration()
+                    Log.i("Own", "FULL DURATION: " + duration)
+                    Log.i("Own", "Past time: " + progressTime)
+
+                    runOnUiThread {
+                        if (progressTime != null && duration != null) {
+                            trackTime.text = "-" + stringForTime(duration - progressTime)
+                        }
+                    }
+                }
+                Thread.sleep(500)
+            }
+        }
 
     }
 

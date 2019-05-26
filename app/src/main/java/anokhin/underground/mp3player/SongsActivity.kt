@@ -55,6 +55,7 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
     }
     lateinit var trackName: TextView
     lateinit var trackTime: TextView
+    lateinit var trackPlayingTime: TextView
     lateinit var autorName: TextView
 
     private var detector: SimpleGestureFilter? = null
@@ -78,6 +79,7 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
 
         outState.putString("trackName", trackName.text.toString())
         outState.putString("trackTime", trackTime.text.toString())
+        outState.putString("trackPlayingTime", trackPlayingTime.text.toString())
         outState.putString("autorName", autorName.text.toString())
 //        val tag = singerPhoto.tag as Int?
 //        if (tag != null)
@@ -97,6 +99,7 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
         trackName = findViewById(R.id.track_name)
         autorName = findViewById(R.id.track_autor)
         trackTime = findViewById(R.id.whole_time)
+        trackPlayingTime = findViewById(R.id.run_time)
         prevTrack = findViewById(R.id.left_image)
         curTrack = findViewById(R.id.center_image)
         nextTrack = findViewById(R.id.right_image)
@@ -133,6 +136,7 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
         if (savedInstanceState != null) {
             trackName.setText(savedInstanceState.getString("trackName", "Track"))
             trackTime.setText(savedInstanceState.getString("trackTime", "42:42"))
+            trackPlayingTime.setText(savedInstanceState.getString("trackPlayingTime", "42:42"))
             autorName.setText(savedInstanceState.getString("autorName", "42:42"))
 
             if (bitMapGlobal != null) {
@@ -151,9 +155,9 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
         } else if (firstTrack != null) {
             trackName.setText(firstTrack?.title)
             ////////////////// PLACE FOR TIME CHANGING {TrackTIme}
-            val secs = firstTrack?.duration!!.div(1000).rem(60)
-            val mins = firstTrack?.duration!!.div(1000).div(60)
-            trackTime.text = "-" + mins.toString() + ":" + secs.toString()
+//            val secs = firstTrack?.duration!!.div(1000).rem(60)
+//            val mins = firstTrack?.duration!!.div(1000).div(60)
+//            trackTime.text = "-" + mins.toString() + ":" + secs.toString()
 //            trackTime.setText(firstTrack?.duration.toString())
             autorName.setText(firstTrack?.artist)
             if (bitMapGlobal != null) {
@@ -198,12 +202,12 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
                 super.onMetadataChanged(metadata)
                 Log.i("Ownn", "Add new biMap")
                 trackName.text = metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE)
-                val duration = metadata?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
-                if (duration != null) {
-                    val secs = duration.div(1000).rem(60)
-                    val mins = duration.div(1000).div(60)
-                    trackTime.text = "-" + mins.toString() + ":" + secs.toString()
-                }
+//                val duration = metadata?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
+//                if (duration != null) {
+//                    val secs = duration.div(1000).rem(60)
+//                    val mins = duration.div(1000).div(60)
+//                    trackTime.text = "-" + mins.toString() + ":" + secs.toString()
+//                }
 //                trackTime.text =
 //                    .toString()
                 autorName.text = metadata?.getString(MediaMetadataCompat.METADATA_KEY_ARTIST)
@@ -260,8 +264,13 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
                     val duration = playerServiceBinder?.getFullDuration()
                     Log.i("Own", "FULL DURATION: " + duration)
                     Log.i("Own", "Past time: " + progressTime)
+
+                    if (progressTime != null && duration != null) {
+                        trackTime.text = "-" + stringForTime(duration - progressTime)
+                        trackPlayingTime.text = stringForTime(progressTime)
+                    }
                 }
-                Thread.sleep(1000)
+                Thread.sleep(500)
             }
         }
 
