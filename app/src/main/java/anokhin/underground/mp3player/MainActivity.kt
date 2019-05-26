@@ -320,6 +320,8 @@ class MainActivity : AppCompatActivity() {
                     mediaController!!.transportControls.play()
                     val intent = Intent(this, SongsActivity::class.java)
                     startActivity(intent)
+                    if (mediaController != null)
+                        mediaController!!.transportControls.skipToNext()
                 }
 
                 dialogFilesList.setOnItemClickListener { parent, view, position, id ->
