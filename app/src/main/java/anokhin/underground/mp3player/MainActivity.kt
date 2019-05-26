@@ -195,6 +195,7 @@ class MainActivity : AppCompatActivity() {
             override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
                 super.onMetadataChanged(metadata)
                 trackName.text = metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE)
+                ////////////////// PLACE FOR TIME CHANGING {TrackTIme}
                 trackTime.text = metadata?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toString()
                 singerPhoto.setImageBitmap(metadata?.getBitmap(MediaMetadataCompat.METADATA_KEY_ART))
                 Log.i("Own", "Add new biMap")
@@ -318,7 +319,6 @@ class MainActivity : AppCompatActivity() {
                         if (hasPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
                             Log.i("AmyAPP", "UNIQ MES. Path: " + curFolder.absolutePath)
                             try {
-
                                 playerServiceBinder!!.setMusicRepositoryFolder(curFolder.absolutePath)
                             } catch (err: IllegalArgumentException) {
                                 Log.i("AmyAPP", "Catched")

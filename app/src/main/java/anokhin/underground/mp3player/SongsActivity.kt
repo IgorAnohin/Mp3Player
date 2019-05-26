@@ -142,7 +142,11 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
 //            }
         } else if (firstTrack != null) {
             trackName.setText(firstTrack?.title)
-            trackTime.setText(firstTrack?.duration.toString())
+            ////////////////// PLACE FOR TIME CHANGING {TrackTIme}
+                    val secs = firstTrack?.duration!!.div(1000).rem(60)
+                    val mins = firstTrack?.duration!!.div(1000).div(60)
+                    trackTime.text = mins.toString() + ":" + secs.toString()
+//            trackTime.setText(firstTrack?.duration.toString())
             autorName.setText(firstTrack?.artist)
             if (bitMapGlobal != null) {
                 Log.i("Own", "Add new biMap " + bitMapGlobal.hashCode())
@@ -186,7 +190,14 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
                 super.onMetadataChanged(metadata)
                 Log.i("Ownn", "Add new biMap")
                 trackName.text = metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE)
-                trackTime.text = metadata?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toString()
+                val duration = metadata?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
+                if (duration != null) {
+                    val secs = duration.div(1000).rem(60)
+                    val mins = duration.div(1000).div(60)
+                    trackTime.text = mins.toString() + ":" + secs.toString()
+                }
+//                trackTime.text =
+//                    .toString()
                 autorName.text = metadata?.getString(MediaMetadataCompat.METADATA_KEY_ARTIST)
 //                singerPhoto.setImageBitmap(metadata?.getBitmap(MediaMetadataCompat.METADATA_KEY_ART))
                 Log.i("Ownn", "Add new biMap")

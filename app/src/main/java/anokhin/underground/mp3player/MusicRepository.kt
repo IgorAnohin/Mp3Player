@@ -113,7 +113,7 @@ class MusicRepository {
                 val file = File(trackPath).parentFile
                 val files = file.listFiles()
 
-                val rightImages = files.filter{ it.name.startsWith(title.toString())}
+                val rightImages = files.filter{ it.name.endsWith(".jpg") && it.name.startsWith(title.toString())}
                 for (im in rightImages) {
                     Log.i("Own", "Image " + im?.absolutePath)
                     val bMap = BitmapFactory.decodeFile(im?.absolutePath)
