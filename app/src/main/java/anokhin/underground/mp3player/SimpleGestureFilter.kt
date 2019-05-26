@@ -61,8 +61,8 @@ class SimpleGestureFilter(private val context: Activity, private val listener: S
         val xDistance = Math.abs(e1.x - e2.x)
         val yDistance = Math.abs(e1.y - e2.y)
 
-        if (xDistance > this.swipeMaxDistance || yDistance > this.swipeMaxDistance)
-            return false
+//        if (xDistance > this.swipeMaxDistance || yDistance > this.swipeMaxDistance)
+//            return false
 
         velocityX = Math.abs(velocityX)
         velocityY = Math.abs(velocityY)
