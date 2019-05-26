@@ -194,7 +194,7 @@
                         android:scaleType="center"
                         android:adjustViewBounds="true"
                         android:src="@drawable/ic_pause_48"
-                        android:padding="15dp"
+                        android:layout_margin="15dp"
                         android:layout_gravity="center"/>
 
             </FrameLayout>
@@ -223,14 +223,26 @@
             android:layout_weight="0.9"
             android:padding="1dp">
 
-        <ImageView
+        <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/gradient_blue_circle"
-                android:src="@drawable/ic_shuffle_24"
-                android:padding="10dp"
-                android:layout_gravity="center"
-                android:layout_weight="3.5"/>
+                android:layout_height="match_parent"
+                android:layout_weight="3.5">
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/gradient_blue_circle"
+                    android:layout_gravity="center"/>
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="center"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_shuffle_24"
+                    android:padding="15dp"
+                    android:layout_gravity="center"/>
+
+        </FrameLayout>
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
