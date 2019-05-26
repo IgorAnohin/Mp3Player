@@ -16,7 +16,9 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import anokhin.underground.mp3player.MainActivity.Companion.bitMapGlobal
@@ -53,6 +55,7 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
         var callback: MediaControllerCompat.Callback? = null
         var firstTrack: MusicRepository.Track? = null
     }
+
     lateinit var trackName: TextView
     lateinit var trackTime: TextView
     lateinit var trackPlayingTime: TextView
@@ -70,6 +73,8 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
     lateinit var prevTrack: ImageView
     lateinit var nextTrack: ImageView
     lateinit var curTrack: ImageView
+
+    lateinit var seekBar: SeekBar
 
     var playing = false
     var pausing = false
@@ -132,6 +137,11 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
                     mediaController!!.transportControls.play()
             }
         }
+
+        seekBar = findViewById(R.id.seek_bar)
+
+
+
 
         if (savedInstanceState != null) {
             trackName.setText(savedInstanceState.getString("trackName", "Track"))
@@ -255,9 +265,14 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
                 }
             }
         }
-
+        seekBar.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View, event: MotionEvent): Boolean {
+                playerServiceBinder?.setProgress(seekBar.progress.toLong())
+                return false
+            }
+        })
         bindService(Intent(this, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
-        thread(start=true) {
+        thread(start = true) {
             while (true) {
                 if (playerServiceBinder != null) {
                     val progressTime = playerServiceBinder?.getCurrentDuration()
@@ -268,6 +283,8 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
                     if (progressTime != null && duration != null) {
                         trackTime.text = "-" + stringForTime(duration - progressTime)
                         trackPlayingTime.text = stringForTime(progressTime)
+                        seekBar.max = duration.toInt()
+                        seekBar.progress = progressTime.toInt()
                     }
                 }
                 Thread.sleep(1000)
@@ -291,13 +308,14 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
             SimpleGestureFilter.SWIPE_RIGHT -> {
                 if (mediaController != null)
                     mediaController!!.transportControls.skipToPrevious()
-                }
+            }
             SimpleGestureFilter.SWIPE_LEFT -> {
                 if (mediaController != null)
                     mediaController!!.transportControls.skipToNext()
-                }
+            }
             SimpleGestureFilter.SWIPE_DOWN -> finish()
-            SimpleGestureFilter.SWIPE_UP -> {}
+            SimpleGestureFilter.SWIPE_UP -> {
+            }
         }
 //        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
     }
