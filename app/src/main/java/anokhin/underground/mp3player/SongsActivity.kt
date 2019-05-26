@@ -270,7 +270,7 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
                         trackPlayingTime.text = stringForTime(progressTime)
                     }
                 }
-                Thread.sleep(500)
+                Thread.sleep(1000)
             }
         }
 

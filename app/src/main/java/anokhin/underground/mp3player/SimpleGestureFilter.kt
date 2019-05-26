@@ -8,7 +8,7 @@ import android.view.MotionEvent
 class SimpleGestureFilter(private val context: Activity, private val listener: SimpleGestureListener) :
     SimpleOnGestureListener() {
     var swipeMinDistance = 100
-    var swipeMaxDistance = 350
+    var swipeMaxDistance = 450
     var swipeMinVelocity = 100
 
     var mode = MODE_DYNAMIC
@@ -58,8 +58,8 @@ class SimpleGestureFilter(private val context: Activity, private val listener: S
         val xDistance = Math.abs(e1.x - e2.x)
         val yDistance = Math.abs(e1.y - e2.y)
 
-//        if (xDistance > this.swipeMaxDistance || yDistance > this.swipeMaxDistance)
-//            return false
+        if (xDistance > this.swipeMaxDistance || yDistance > this.swipeMaxDistance)
+            return false
 
         velocityX = Math.abs(velocityX)
         velocityY = Math.abs(velocityY)
