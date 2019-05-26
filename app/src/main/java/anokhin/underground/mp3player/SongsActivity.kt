@@ -21,6 +21,28 @@ import android.widget.TextView
 import android.widget.Toast
 import anokhin.underground.mp3player.MainActivity.Companion.bitMapGlobal
 import kotlinx.android.synthetic.main.songs.view.*
+import kotlin.concurrent.thread
+import com.google.android.exoplayer2.C
+import java.util.*
+
+val formatBuilder = StringBuilder();
+val formatter = Formatter(formatBuilder, Locale.getDefault());
+
+fun stringForTime(timeMs: Long): String {
+    var timeMs = timeMs
+    if (timeMs == C.TIME_UNSET) {
+        timeMs = 0
+    }
+    val totalSeconds = (timeMs + 500) / 1000
+    val seconds = totalSeconds % 60
+    val minutes = totalSeconds / 60 % 60
+    val hours = totalSeconds / 3600
+    formatBuilder.setLength(0)
+    return if (hours > 0)
+        formatter.format("%d:%02d:%02d", hours, minutes, seconds).toString()
+    else
+        formatter.format("%02d:%02d", minutes, seconds).toString()
+}
 
 class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
     companion object {
@@ -109,11 +131,6 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
         }
 
         if (savedInstanceState != null) {
-//            outState.putString("trackName", trackName.text.toString())
-//            outState.putString("trackTime", trackTime.text.toString())
-//            outState.putInt("songPhoto", singerPhoto.tag as Int)
-//            val bmp = savedInstanceState.getParcelable<Bitmap>("bitmap")
-
             trackName.setText(savedInstanceState.getString("trackName", "Track"))
             trackTime.setText(savedInstanceState.getString("trackTime", "42:42"))
             autorName.setText(savedInstanceState.getString("autorName", "42:42"))
@@ -131,21 +148,12 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
             }
 
             Log.i("Own", "HEEEERRREEE")
-//            if (bitMapGlobal != null) {
-//                Log.i("Own", "Add new biMap " + bitMapGlobal.hashCode())
-//                singerPhoto.post {
-//
-//                    singerPhoto.setImageBitmap(bitMapGlobal)
-////                    singerPhoto.setImageResource(imageId)
-////                    singerPhoto.tag = imageId
-//                }
-//            }
         } else if (firstTrack != null) {
             trackName.setText(firstTrack?.title)
             ////////////////// PLACE FOR TIME CHANGING {TrackTIme}
-                    val secs = firstTrack?.duration!!.div(1000).rem(60)
-                    val mins = firstTrack?.duration!!.div(1000).div(60)
-                    trackTime.text = mins.toString() + ":" + secs.toString()
+            val secs = firstTrack?.duration!!.div(1000).rem(60)
+            val mins = firstTrack?.duration!!.div(1000).div(60)
+            trackTime.text = "-" + mins.toString() + ":" + secs.toString()
 //            trackTime.setText(firstTrack?.duration.toString())
             autorName.setText(firstTrack?.artist)
             if (bitMapGlobal != null) {
@@ -194,7 +202,7 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
                 if (duration != null) {
                     val secs = duration.div(1000).rem(60)
                     val mins = duration.div(1000).div(60)
-                    trackTime.text = mins.toString() + ":" + secs.toString()
+                    trackTime.text = "-" + mins.toString() + ":" + secs.toString()
                 }
 //                trackTime.text =
 //                    .toString()
@@ -245,6 +253,17 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
         }
 
         bindService(Intent(this, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
+        thread(start=true) {
+            while (true) {
+                if (playerServiceBinder != null) {
+                    val progressTime = playerServiceBinder?.getCurrentDuration()
+                    val duration = playerServiceBinder?.getFullDuration()
+                    Log.i("Own", "FULL DURATION: " + duration)
+                    Log.i("Own", "Past time: " + progressTime)
+                }
+                Thread.sleep(1000)
+            }
+        }
 
         /////////////////////////
     }

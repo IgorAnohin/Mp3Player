@@ -1,5 +1,6 @@
 package anokhin.underground.mp3player
 
+import android.animation.TimeAnimator
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -311,6 +312,20 @@ class PlayerService : Service() {
         fun setMusicRepositoryFolder(musicFolder:String) {
             Log.i("AmyAPP", "Set Music Folder")
             musicRepository.setMusicFolder(musicFolder)
+        }
+        fun getCurrentDuration(): Long? {
+            Log.i("AmyAPP", "Gettign time")
+            return if (exoPlayer != null)
+                exoPlayer?.currentPosition
+            else
+                null
+        }
+        fun getFullDuration(): Long? {
+            Log.i("AmyAPP", "Gettign duration")
+            return if (exoPlayer != null)
+                exoPlayer?.duration
+            else
+                null
         }
     }
 
