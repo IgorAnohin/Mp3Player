@@ -28,12 +28,12 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
 
         when (direction) {
 
-            SimpleGestureFilter.SWIPE_RIGHT -> str = "Swipe Right"
-            SimpleGestureFilter.SWIPE_LEFT -> str = "Swipe Left"
-            SimpleGestureFilter.SWIPE_DOWN -> str = "Swipe Down"
-            SimpleGestureFilter.SWIPE_UP -> str = "Swipe Up"
+            SimpleGestureFilter.SWIPE_RIGHT -> {}
+            SimpleGestureFilter.SWIPE_LEFT -> {}
+            SimpleGestureFilter.SWIPE_DOWN -> finish()
+            SimpleGestureFilter.SWIPE_UP -> {}
         }
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDoubleTap() {
