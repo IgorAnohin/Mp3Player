@@ -101,6 +101,10 @@ class MusicRepository {
             this.album = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)
             this.title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
             this.artist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+            if (artist.isNullOrEmpty())
+                this.artist = "Unknown artist"
+            if (title.isNullOrEmpty())
+                this.title = "Unknown track"
             this.bitmapResId = R.drawable.image396168
             this.uri = Uri.parse(trackPath)
             this.duration = java.lang.Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION))
