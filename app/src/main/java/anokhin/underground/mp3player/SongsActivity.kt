@@ -16,6 +16,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
+import android.view.Display
 import android.view.View
 import android.widget.ImageView
 import android.widget.SeekBar
@@ -54,6 +55,7 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
 
         var callback: MediaControllerCompat.Callback? = null
         var firstTrack: MusicRepository.Track? = null
+        var maxY: Int = 0
     }
 
     lateinit var trackName: TextView
@@ -79,6 +81,7 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
     var playing = false
     var pausing = false
 
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
@@ -98,8 +101,14 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.songs)
+
+        val mdisp: Display = getWindowManager().getDefaultDisplay();
+        maxY = mdisp.height
+
 
         trackName = findViewById(R.id.track_name)
         autorName = findViewById(R.id.track_autor)
@@ -139,7 +148,6 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
         }
 
         seekBar = findViewById(R.id.seek_bar)
-
 
 
 

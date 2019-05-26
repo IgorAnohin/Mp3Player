@@ -4,6 +4,9 @@ import android.app.Activity
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
+import android.view.Display
+
+
 
 class SimpleGestureFilter(private val context: Activity, private val listener: SimpleGestureListener) :
     SimpleOnGestureListener() {
@@ -65,7 +68,7 @@ class SimpleGestureFilter(private val context: Activity, private val listener: S
         velocityY = Math.abs(velocityY)
         var result = false
 
-        if (velocityX > this.swipeMinVelocity && xDistance > this.swipeMinDistance) {
+        if (velocityX > this.swipeMinVelocity && xDistance > this.swipeMinDistance && (e1.y< SongsActivity.maxY/2||e2.y<SongsActivity.maxY/2)) {
             if (e1.x > e2.x)
             // right to left
                 this.listener.onSwipe(SWIPE_LEFT)
