@@ -1,5 +1,6 @@
 package anokhin.underground.mp3player
 
+import android.content.res.Resources
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.util.Log
@@ -13,15 +14,27 @@ import java.time.Duration
 
 
 class MusicRepository {
-    private val data = ArrayList<Track>()
-    var maxIndex = data.size - 1
-    private var currentItemIndex = 0
+    companion object {
+        val data = ArrayList<Track>()
+        var maxIndex = data.size - 1
+        var currentItemIndex = 0
+        var resources: Resources? = null
 
-    val checkNext: Track?
-        get() = if (currentItemIndex == maxIndex)
-                    data[0]
-                else
-                    data[currentItemIndex+1]
+        val checkNext: Track?
+            get() = if (data.size == 0)
+                        null
+                    else if (currentItemIndex == maxIndex)
+                        data[0]
+                    else
+                        data[currentItemIndex+1]
+        val checkPrev: Track?
+            get() = if (data.size == 0)
+                null
+            else if (currentItemIndex == 0)
+                data[maxIndex]
+            else
+                data[currentItemIndex-1]
+    }
 
     val next: Track?
         get() {
@@ -85,17 +98,44 @@ class MusicRepository {
             val mmr = MediaMetadataRetriever()
             mmr.setDataSource(trackPath)
 
-
-            if (mmr.embeddedPicture != null) {
-                val inputStream = ByteArrayInputStream(mmr.embeddedPicture)
-                this.bitmap = BitmapFactory.decodeStream(inputStream)
-            }
             this.album = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)
             this.title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
             this.artist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
             this.bitmapResId = R.drawable.image396168
             this.uri = Uri.parse(trackPath)
             this.duration = java.lang.Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION))
+
+            if (mmr.embeddedPicture != null) {
+                val inputStream = ByteArrayInputStream(mmr.embeddedPicture)
+                this.bitmap = BitmapFactory.decodeStream(inputStream)
+            } else {
+                this.bitmap = BitmapFactory.decodeResource(MusicRepository.resources, bitmapResId)
+                val file = File(trackPath).parentFile
+                val files = file.listFiles()
+
+                val rightImages = files.filter{ it.name.startsWith(title.toString())}
+                for (im in rightImages) {
+                    Log.i("Own", "Image " + im?.absolutePath)
+                    val bMap = BitmapFactory.decodeFile(im?.absolutePath)
+                    this.bitmap = bMap
+                    if (this.bitmap == null)
+                        Log.i("Own", "Fuck")
+                    else break
+                }
+                if (this.bitmap == null) {
+                    val images = files.filter { it.name.endsWith(".jpg") }
+                    for (im in images) {
+                        Log.i("Own", "Image " + im?.absolutePath)
+                        val bMap = BitmapFactory.decodeFile(im?.absolutePath)
+                        this.bitmap = bMap
+                        if (this.bitmap == null)
+                            Log.i("Own", "Fuck")
+                        else break
+                    }
+                }
+
+
+            }
         }
         constructor(album: String?, title: String, artist: String?, duration: Long?, bitmap: Bitmap?) {
             this.album = album

@@ -25,7 +25,9 @@ import kotlinx.android.synthetic.main.songs.view.*
 class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
     companion object {
         var leftBitMapGlobal: Bitmap? = null
+        var curBitMapGlobal: Bitmap? = null
         var rightBitMapGlobal: Bitmap? = null
+
         var callback: MediaControllerCompat.Callback? = null
         var firstTrack: MusicRepository.Track? = null
     }
@@ -119,10 +121,12 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
             if (bitMapGlobal != null) {
                 Log.i("Own", "Add new biMap " + bitMapGlobal.hashCode())
                 curTrack.post {
-
                     curTrack.setImageBitmap(bitMapGlobal)
-//                    singerPhoto.setImageResource(imageId)
-//                    singerPhoto.tag = imageId
+                }
+                val next_track = MusicRepository.checkNext
+                Log.i("Ownn", "Next Track " + next_track?.duration)
+                nextTrack.post {
+                    nextTrack.setImageBitmap(next_track?.bitmap)
                 }
             }
 
@@ -147,6 +151,14 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
                     curTrack.setImageBitmap(bitMapGlobal)
 //                    singerPhoto.setImageResource(imageId)
 //                    singerPhoto.tag = imageId
+                }
+                val next_track = MusicRepository.checkNext
+                Log.i("Ownn", "First Track")
+                Log.i("Ownn", "Next Track " + next_track?.duration)
+                if (next_track?.bitmap != null)
+                    Log.i("Ownn", "Next Track Bitmap!!! " + next_track.duration)
+                nextTrack.post {
+                    nextTrack.setImageBitmap(next_track?.bitmap)
                 }
             }
         }
@@ -179,6 +191,17 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
 //                singerPhoto.setImageBitmap(metadata?.getBitmap(MediaMetadataCompat.METADATA_KEY_ART))
                 Log.i("Ownn", "Add new biMap")
                 Log.i("Ownn", "Add new biMap")
+                val next_track = MusicRepository.checkNext
+                Log.i("Ownn", "Next Track " + next_track?.duration)
+                nextTrack.post {
+                    nextTrack.setImageBitmap(next_track?.bitmap)
+                }
+
+                val prev_track = MusicRepository.checkPrev
+                Log.i("Ownn", "Next Track " + prev_track?.duration)
+                prevTrack.post {
+                    prevTrack.setImageBitmap(prev_track?.bitmap)
+                }
 
 //                metadata?.getBitmap(MediaMetadataCompat.METADATA_KEY_ART)
 //                metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE)
@@ -226,8 +249,14 @@ class SongsActivity : Activity(), SimpleGestureFilter.SimpleGestureListener {
 
         when (direction) {
 
-            SimpleGestureFilter.SWIPE_RIGHT -> {}
-            SimpleGestureFilter.SWIPE_LEFT -> {}
+            SimpleGestureFilter.SWIPE_RIGHT -> {
+                if (mediaController != null)
+                    mediaController!!.transportControls.skipToPrevious()
+                }
+            SimpleGestureFilter.SWIPE_LEFT -> {
+                if (mediaController != null)
+                    mediaController!!.transportControls.skipToNext()
+                }
             SimpleGestureFilter.SWIPE_DOWN -> finish()
             SimpleGestureFilter.SWIPE_UP -> {}
         }

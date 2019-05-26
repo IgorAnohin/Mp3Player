@@ -107,7 +107,7 @@ class PlayerService : Service() {
                 }
             }
 
-            if (musicRepository.maxIndex >= 0) {
+            if (MusicRepository.maxIndex >= 0) {
                 mediaSession!!.setPlaybackState(stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 1f).build())
                 currentState = PlaybackStateCompat.STATE_PLAYING
 //                refreshNotificationAndForegroundStatus(currentState)
@@ -185,7 +185,12 @@ class PlayerService : Service() {
 //            if (track.bitmap != null)
 //                metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, track.bitmap)
 //            else
-            metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, BitmapFactory.decodeResource(resources, track.bitmapResId))
+            val bitImage = if (track.bitmap != null)
+                               track.bitmap
+                           else
+                               BitmapFactory.decodeResource(resources, track.bitmapResId)
+
+            metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitImage)
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, track.title)
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, track.album)
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, track.artist)

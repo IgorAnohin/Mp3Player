@@ -128,13 +128,17 @@ class MainActivity : AppCompatActivity() {
 
         trackName.isClickable = false
         trackName.setOnClickListener{
-            val intent = Intent(this, SongsActivity::class.java)
-            startActivity(intent)
+            if (bitMapGlobal != null) {
+                val intent = Intent(this, SongsActivity::class.java)
+                startActivity(intent)
+            }
         }
         singerPhoto.isClickable = false
         singerPhoto.setOnClickListener{
-            val intent = Intent(this, SongsActivity::class.java)
-            startActivity(intent)
+            if (bitMapGlobal != null) {
+                val intent = Intent(this, SongsActivity::class.java)
+                startActivity(intent)
+            }
         }
 
 
